@@ -21,6 +21,9 @@ This repository also contains a representation of the work in a paper format wit
 ### Presentation slides
 The presentation containing much of the same information as the paper but in slides format (and slightly less verbosity) is located in the `Slides` at [LeniaEvolution.pptx](./Slides/LeniaEvolution.pptx)
 
+### Extras
+Some additional evolution samples generated from other runs while working on this project can be found in `Paper/Assets/EvoSamples` linked here [EvoSamples](Paper/Assets/EvoSamples)
+
 
 
 

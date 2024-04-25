@@ -1,0 +1,410 @@
+<!doctype html>
+<meta charset="utf-8">
+<script src="Assets/template.js"></script>
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<script type="text/front-matter">
+  Title: "CAS Final Project: Evolving Flow Lenia for Movement"
+  author: Chris Egersdoerfer
+</script>
+
+<style>
+    #previews a {
+      text-decoration: none;
+      overflow: hidden;
+      margin-bottom: 12px;
+      display: block;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+    
+    }
+    #previews figcaption {
+      margin-left: 100px;
+    }
+    #previews svg, #previews img #previews iframe{
+      width: 200;
+      float: left;
+    }
+    
+    @media(min-width: 768px) {
+      #previews {
+        overflow: hidden;
+        margin-top: 48px;
+        margin-bottom: 48px;
+      }
+      #previews figcaption {
+        margin-left: 0;
+      }
+      #previews figcaption b {
+        display: block;
+      }
+      #previews figcaption b span {
+        display: block;
+      }
+      #previews a {
+        position: relative;
+        float: left;
+        width: 19%;
+        margin-right: 3.6%;
+        padding-right: 3.6%;
+        border-right: 1px solid rgba(0, 0, 0, 0.05);
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+      #previews a:last-child {
+        margin-right: 0;
+        padding-right: 0;
+        border-right: 0;
+      }
+      #previews svg, #previews img, #previews iframe{
+        margin-bottom: 18px;
+        display: block;
+        width: 100%;
+        float: none;
+      }
+    }
+    
+    @media(min-width: 1024px) {
+      #previews {
+        margin-top: 90px;
+        margin-bottom: 90px;
+      }
+    }
+</style>
+
+<dt-article class="centered">
+    <h1>CAS Final Project: Evolving Flow-Lenia for Movement</h1>
+    <p style="text-align: center;">Chris Egersdoerfer</p>
+    <dt-byline></dt-byline>
+    
+    <h2>Introduction</h2>
+    <!-- describe what cellular automata are in the introduction -->
+    <p>Cellular Automata (CA) are a class of mathematical models that are used to simulate complex systems. 
+        They are made up of a grid of cells, each of which can be in one of a finite number of states. 
+        The state of each cell is updated at each time step according to a set of rules that determine how the state of a cell depends on the states of its neighbors. 
+        Cellular automata are used to model a wide range of systems, including physical systems, biological systems, and social systems. 
+        They are also used in computer science and artificial intelligence to model computation and to solve optimization problems. </p>
+        
+    <p> CA are an example of a complex adaptive system (CAS) due to their ability to exhibit complex behavior that emerges from the interactions of simple components, exemplifying the principles of emergence and self-organization.
+        Even in their most primitive form, CA can exhibit highly complex behavior, as demonstrated by Conway's Game of Life.
+
+    <h2>Conway's Game of Life</h2>
+    <p>Conway's Game of Life is a two-dimensional cellular automaton that was invented by the British mathematician John Conway in 1970. 
+        It is one of the most well-known examples of a cellular automaton and has been studied extensively by mathematicians, computer scientists, and other researchers. 
+        The Game of Life is played on an infinite two-dimensional grid of square cells, each of which can be in one of two states: alive or dead. 
+        The state of each cell is updated at each time step according to a set of rules that determine how the state of a cell depends on the states of its eight neighbors. 
+        The rules are simple and deterministic, but they can give rise to highly complex and unpredictable behavior. 
+        The Game of Life is Turing complete, which means that it can simulate any computer program, given a large enough grid and enough time. 
+        The Game of Life has been used to study a wide range of topics, including the behavior of complex systems, the nature of life and intelligence, and the limits of computation. </p>
+    
+    <!-- add image of conway's game of life here and center it -->
+    <div class="l-page">
+        <img src="Assets/Conway/Cell.png" alt="Conway's Game of Life" width="150" height="150" style="display: block; margin-left: auto; margin-right: auto;">
+        <figcaption style="text-align: center;">Cell depicted with its immediate neighbors</figcaption>
+    </div>
+
+    <!-- add list of rules here -->
+    <dt-byline></dt-byline>  
+    <h3>Rules</h3>
+    <p>1. Any live cell with fewer than two live neighbors dies, as if by underpopulation.</p>
+    <p>2. Any live cell with two or three live neighbors lives on to the next generation.</p>
+    <p>3. Any live cell with more than three live neighbors dies, as if by overpopulation.</p>
+    <p>4. Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.</p>
+    <div class="l-page">
+        <img src="Assets/Conway/Rules.png" alt="Conway's Game of Life" width="800" height="200" style="display: block; margin-left: auto; margin-right: auto;">
+        <figcaption style="text-align: center;">Rules of Conway's Game of Life</figcaption>
+    </div>
+    <dt-byline></dt-byline>  
+    
+    <div class="l-page">
+        <iframe width="385" height="300" src="Assets/Conway/Conway.mp4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block; margin-left: auto; margin-right: auto;"></iframe>
+        <figcaption style="text-align: center;">Example of a stable pattern (in this case a glider) in Conway's Game of Life</figcaption>
+    </div>
+
+    <p style="margin-top: 5%;">While certain initial conditions in Conway's Game of Life lead to complex and highly organized or unorganized behavior, its primitive implementation leaves room for significant expansion.</p>
+    
+    <dt-byline></dt-byline>
+
+
+
+    <h3>Expansion 1: Continuous Cell State</h3>
+    <p>The first expansion to Conway's Game of Life is to allow for continuous cell states. More specifically, instead of having cells be either alive or dead, we can allow them to be in a continuous range of states in the range [0, 1]. 
+        For example, as represented in the diagram below, a cell might decrease its value by some value less than 1 at each time step if it's neighbors are all in a certain range of values.</p>
+        <div class="l-page">
+            <img src="Assets/E1/continuousState.png" alt="Conway's Game of Life" width="500" height="200" style="display: block; margin-left: auto; margin-right: auto;">
+            <figcaption style="text-align: center;">Cell state decaying over time</figcaption>
+        </div>
+    <dt-byline></dt-byline>
+
+
+    <h3>Expansion 2: Continuous Neighbourhood</h3>
+    <p>
+        The second expansion to Conway's Game of Life is to allow for continuous neighborhoods. Instead of having cells interact with their immediate neighbors, we can allow them to interact with a continuous range of cells in their vicinity.
+        For example, as represented in the diagram below, a cell might consider a larger grid of surrounding cells before updating its own state.
+    </p>
+    <div class="l-page">
+        <img src="Assets/E2/larger neighborhood.png" alt="Conway's Game of Life" width="320" height="250" style="display: block; margin-left: auto; margin-right: auto;">
+        <figcaption style="text-align: center;">Cell considering a larger neighborhood</figcaption>
+    </div>
+    
+
+    <h3>Expansion 3: Weighted Neighborhood</h3>
+    <p>
+        The third expansion to Conway's Game of Life is to allow for weighted neighborhoods. 
+        More specifically, instead of directly summing the value of all neighboring cells and normalizing the result, we define a kernel that assigns weights to each cell in the neighborhood.
+        For example, as represented in the diagram below, a cell might assign a higher weight to cells that are in some ring around it.
+    </p>
+    <div class="l-page">
+        <img src="Assets/E3/ring_kernel.png" alt="Conway's Game of Life" width="250" height="250" style="display: block; margin-left: auto; margin-right: auto;">
+        <figcaption style="text-align: center;">Kernel function assigning weights to cells in a ring around the cell <dt-cite key="leniatutorial2023"></dt-cite></figcaption>
+    </div>
+
+
+    <h3>Expansion 4: Continuous Rules</h3>
+    <p>
+        The fourth expansion to Conway's Game of Life is to allow for continuous rules. 
+        Instead of having a discrete function defining the rules that determine how the state of a cell depends on the states of its neighbors, we can allow the rules to be a continuous function.
+        For example, as represented in the diagram below, a cell might update its state based on a gaussian bump function where the y value of the function is the update value which is added to the cell's current state and the x value is the weighted sum calculated from the kernel described in the previous expansion.
+    </p>
+    <a>
+        <img src="Assets/E4/gaussian_growth.png" alt="Conway's Game of Life" width="350" height="200" style="display: block; margin-left: auto; margin-right: auto;">
+        <figcaption style="text-align: center;">Gaussian bump function used to update cell state. </figcaption>
+    </a>
+    <a>
+        <img src="Assets/E4/discrete_growth.png" alt="Conway's Game of Life" width="350" height="200" style="display: block; margin-left: auto; margin-right: auto;">
+        <figcaption style="text-align: center;">Discrete function used to update cell state for comparison</figcaption>
+    </a>
+
+
+    <h2>Lenia</h2>
+    <p>
+        Once we have expanded Conway's Game of Life to include continuous cell states, continuous neighborhoods, weighted neighborhoods, and continuous rules, we arrive at a system that is known as Lenia<dt-cite key="Lenia"></dt-cite>.
+        What is immediately evident is that, due to the continuous nature of the system and its components, the behavior of Lenia seems more organic and fluid than that of Conway's Game of Life.
+        In some many cases even, the behavior of Lenia resembles biological life at the cellular level.
+    </p>
+    <div class="l-middle"></div>
+        <a>
+            <iframe  width="385" height="300" src="Assets/Lenia/LeniaBiological.mp4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block; margin-left: auto; margin-right: auto;"></iframe>
+            <figcaption style="text-align: center;">Lenia behavior resembling cellular life</figcaption>
+        </a>
+        <a>
+            <iframe width="385" height="300" src="Assets/Lenia/LeniaGlider.mp4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block; margin-left: auto; margin-right: auto;"></iframe>
+            <figcaption style="text-align: center;">Lenia behavior resembling a glider similar to the one previously shown in Conway's Game of Life</figcaption>
+        </a>
+    </div>
+
+    <p>
+        However, even with the expanded capabilities of Lenia, the system still exhibits one key limitation. Specifically, the system is unstable meaning that most initial conditions will lead to the system either dying out or exploding.
+    </p>
+
+    <div class="l-middle">
+        <a>
+            <iframe width="385" height="300" src="Assets/Lenia/LeaniaExplosion.mp4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block; margin-left: auto; margin-right: auto;"></iframe>
+            <figcaption style="text-align: center;">Depiction of unstable behavior in Lenia where mass explodes</figcaption>
+        </a>
+    </div>
+
+
+    <h2>Formal Notation</h2>
+    <p>
+        Before venturing to the final expansion which is to be applied to the system, it is helpful to formalize the previous expansions in mathematical terms. For this we can define the calculation for each cell at time \(t\) as a function \(U_{i}^{t} = K * A_{i}^{t}\) 
+        where \(A_{i}^{t}\) is the state of cells neighboring some cell \(i\) at time \(t\), \(K\) is the kernel function that assigns weights to cells in the neighborhood, and \(U^{t}\) is known as the potential field of the cell at time \(t\).
+        The update for a cell at position \(i\) is then given by \(A_{i}^{t+1} = G(U_{i}^{t})\) where \(G\) is the growth function that updates the state of the cell based on the potential field. In a more general form, the update for the entire Lenia system can be written as:
+        \(A^{t+\Delta t} = \left[ A^{t} + \Delta t G(K * A^{t}) \right]_0^1\) where \(\Delta t\) is the time step and \([x]_0^1\) denotes the bounds of the state space to be between 0 and 1.
+    </p>
+    
+
+    <h3>Expansion 5: Mass Conservation</h3>
+    <p>
+        To address the instability of Lenia, one further expansion is added to the system, targeting mass conservation. Intuitively, in cellular automata systems, mass can be thought of as the sum of states of all cells in the system.
+        In this way, mass conservation can be thought of as the principle that the total mass of the system should remain constant over time, which is in line with biological systems in the real world, where mass must also be conserved.
+        To achieve this, particles are introduced to the system and the state \(A_{i}^{t}\) no longer considers the state of neighboring cells but rather the distance of particles to the cell in question, which is then used to calculate the potential field as \(U^{t} = \sum_i K(\| \mathbf{x} - \mathbf{p}_i^t \|)\)  where  \(\mathbf{p}_i^t\) is the position of particle \(i\) at time \(t\).
+        To calculate the update for the cell, the growth function is kept the same as before, but using the new particle-based potential field calculation as input. However, to keep in line with mass conservation, the value calculated by the growth function determines the attractive force that the cell exerts on the particles in the system. So as to limit the dense clustering of particles in a single cell, each particle is also given a fixed repulsion force which is applied in a gaussian distribution surrounding its position <dt-cite key="particle_lenia_2023"></dt-cite>.
+    </p>
+
+    <div class="l-middle">
+        <a>
+            <iframe width="385" height="300" src="Assets/ParticleLenia/Particles.mp4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block; margin-left: auto; margin-right: auto;"></iframe>
+            <figcaption style="text-align: center;">Particle Lenia in action. The black dots represent the particles which remain fixed in amount. The green represents areas of dominant attractive force while the red represents areas of dominant repulsive force. White areas represent cells where the growth is 0<dt-cite key="particle_lenia_2023"></dt-cite> </figcaption>
+        </a>
+
+    <h2>Flow-Lenia</h2>
+    <p>
+        As a result of all the expansions made to the system, we arrive at a system that is known as Flow-Lenia <dt-cite key="flowLenia"></dt-cite>. Flow-Lenia is a system that is capable of exhibiting complex behavior that is both organic and fluid, resembling biological life at the cellular level.
+        The system is also stable due to the mass conservation principle that was introduced in the final expansion. This stability allows for the ability to explore the parameter space of the system and to observe the behavior of the system under different conditions without the need for filtering out explosive or dying out behavior which is noted as a key issue in other work <dt-cite key="sensorimotor_agency_2022"></dt-cite>.
+    </p>
+
+    <h2>Evolutionary Algorithms</h2>
+    <p>
+        To learn the initial conditions that lead to the emergence of specific behaviors in Flow-Lenia, evolutionary algorithms can be used. Evolutionary algorithms are a class of optimization algorithms that learn to achieve a goal by iteratively improving a population of candidate solutions.
+        In the context of Flow-Lenia, evolutionary algorithms can be used to learn the system parameters that lead to the emergence of specific behaviors, such as movement or self-organization. By evolving the parameters of the system, we can explore the parameter space of Flow-Lenia and discover the conditions that give rise to interesting and complex behavior.
+        The specific parameters that can be evolved include the following:
+        <ul>
+            <li>
+                Kernel function \(K_i(x) = \sum_{j=1}^{k} b_{i,j} \exp \left( -\frac{ \left( \frac{x}{r_i R} - a_{i,j} \right)^2 }{2 \omega_{i,j}^2} \right)\) where \(b_{i,j}\) is the weight of the \(j\)th gaussian bump, \(a_{i,j}\) is the center of the \(j\)th gaussian bump, \(r_i\) is the radius of the \(i\)th cell, \(R\) is the radius of the kernel, and \(\omega_{i,j}\) is the width of the \(j\)th gaussian bump. The individual parameters \(b_{i,j}\), \(a_{i,j}\), and \(\omega_{i,j}\) can be evolved while the function itself remains fixed.
+            </li>
+            <div class="l-middle">
+                <iframe src="https://www.desmos.com/calculator/cgnrbffui3?embed" width="500" height="500" style="border: 1px solid #ccc; display: block; margin-left: auto; margin-right: auto;" frameborder=0></iframe>
+                <figcaption style="text-align: center;">Kernel function visualization. click the Desmos logo in the bottom right to edit the parameters.</figcaption>
+            </div>
+            <li>
+                Growth function \(G_i(x) = 2 \exp \left( -\frac{(\mu_i - x)^2}{2\sigma_i^2} \right) - 1\) where \(\mu_i\) is the mean of the gaussian bump, \(\sigma_i\) is the standard deviation of the gaussian bump, and the individual parameters \(\mu_i\) and \(\sigma_i\) can be evolved while the function itself remains fixed.  \( \sum_{j=1}^N a_j \). Note also, that the -1 is used to ensure that the growth function is bounded between -1 and 1.
+            </li>
+            <div class="l-middle">
+                <iframe src="https://www.desmos.com/calculator/ntg95j8vww?embed" width="500" height="500" style="border: 1px solid #ccc; display: block; margin-left: auto; margin-right: auto;" frameborder=0></iframe>
+                <figcaption style="text-align: center;">Growth function visualization. click the Desmos logo in the bottom right to edit the parameters.</figcaption>
+            </div>
+
+        </ul>
+        The dynamics of the system itself, such as the number of particles, the repulsion force of the particles, and the time step, are kept fixed during the evolution process.
+    </p>
+
+    <p>
+        The evolutionary algorithm works by sampling parameters from a distribution, evaluating the fitness of each parameter set, and updating the distribution based on the fitness of the samples. The specific algorithm used for this project is the Open AI Evolution Strategies (Open ES) algorithm, which is a black-box optimization algorithm that is well-suited for high-dimensional optimization problems <dt-cite key="salimans2017evolution"></dt-cite>.
+        Notably, the Open ES algorithm does not require the computation of gradients, making it suitable for optimizing complex and non-differentiable functions. Also, while the setup seems similar to that of reinforcement learning algorithms, the key difference lies in the fact that reinforcement learning algorithms directly learn the policy that maps states to actions, while evolutionary algorithms learn a distribution to sample the parameters of the policy.
+        The implementation of the algorithm is done in Jax using the evosax library, which provides a simple and scalable interface for running evolutionary algorithms in Jax <dt-cite key="evosax2022github"></dt-cite>.
+    </p>
+
+    <h2>Learning to Move</h2>
+    <p>
+        To demonstrate the capabilities of Flow-Lenia in combination with the mentioned evolutionary algorithm, the evolutionary algorithm was tasked with learning the system parameters which lead to movement. 
+        Specifically, the algorithm learns to maximize a fitness function that is defined as the distance traveled by the center of mass of the particles in the system over a fixed time interval.
+        The approach was set up as follows:
+        <ul>
+            <li> 
+                Initialize an empty 256 x 256 grid of cells
+            </li>
+            <li>
+                Initialize a 40 x 40 grid to define the initial state and total mass of the system
+            </li>
+            <li>
+                Initialize the kernel function and growth function with random parameters
+            </li>
+            <li>
+                Run the evolutionary algorithm for 1500 generations with a population size of 16
+            </li>
+            <li>
+                Visualize the best parameter set every 50 generations
+            </li>
+        </ul> 
+    <h3>Fitness Function Tuning</h3>
+    <p>
+        There are a number of factors which seem to have a large impact on the learning process. The most important of these surround the implementation of the fitness function. In the initial attempts to learn movement, the fitness function calculated a normalized distance traveled by the center of mass of the particles in the system over a fixed time interval. However, the small increments in fitness due to normalization made it difficult for the evolutionary algorithm to learn the correct parameters.
+        To address this, the fitness function was changed to calculate the total distance traveled by the center of mass of the particles in the system over a fixed time interval. This change allowed for larger increments in fitness, which in turn made it easier for the evolutionary algorithm to learn the correct parameters.
+        For comparison, the initial attempts using a normalized fitness function are shown in the video below, where it seems that the system enforces some dispersion of mass rather than directed motion. The final results after changing the fitness function are shown in the results section.
+    </p>
+    <div class="l-middle">
+        <a>
+            <iframe width="250" height="200" src="Assets/EvoSamples/len.mp4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block; margin-left: auto; margin-right: auto;"></iframe>
+            <figcaption style="text-align: center;">Initial attempts at learning movement using a normalized fitness function</figcaption>
+        </a>
+    </div>
+        
+
+    <h2>Results</h2>
+    <p>
+        The results of the evolutionary algorithm are shown in the videos below. The initial stages show interesting behavior and form but do not exhibit significant movement. However, as the generations progress, the system learns to move in a coordinated manner.
+    </p>
+    
+    <div class="l-middle">
+        <a>
+            <iframe width="250" height="200" src="Assets/EvoSamples2/lenia_0.mp4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block; margin-left: auto; margin-right: auto;"></iframe>
+            <figcaption style="text-align: center;">Generation 0</figcaption>
+        </a>
+        <a>
+            <iframe width="250" height="200" src="Assets/EvoSamples2/lenia_250.mp4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block; margin-left: auto; margin-right: auto;"></iframe>
+            <figcaption style="text-align: center;">Generation 250</figcaption>
+        </a>
+        <a>
+            <iframe width="250" height="200" src="Assets/EvoSamples2/lenia_750.mp4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block; margin-left: auto; margin-right: auto;"></iframe>
+            <figcaption style="text-align: center;">Generation 750</figcaption>
+        </a>
+        <a>
+            <iframe width="250" height="200" src="Assets/EvoSamples2/lenia_1000.mp4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block; margin-left: auto; margin-right: auto;"></iframe>
+            <figcaption style="text-align: center;">Generation 1000</figcaption>
+        </a>
+        <a>
+            <iframe width="250" height="200" src="Assets/EvoSamples2/lenia_1250.mp4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block; margin-left: auto; margin-right: auto;"></iframe>
+            <figcaption style="text-align: center;">Generation 1250</figcaption>
+        </a>
+        <a>
+            <iframe width="250" height="200" src="Assets/EvoSamples2/lenia_1500.mp4" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display: block; margin-left: auto; margin-right: auto;"></iframe>
+            <figcaption style="text-align: center;">Generation 1500</figcaption>
+        </a>
+    </div>
+
+
+</dt-article>
+
+<dt-appendix>
+</dt-appendix>
+
+<script type="text/bibliography">
+    @article{Lenia,
+        author = {Chan, Bert},
+        year = {2019},
+        month = {10},
+        pages = {251-286},
+        title = {Lenia: Biology of Artificial Life},
+        volume = {28},
+        journal = {Complex Systems},
+        doi = {10.25088/ComplexSystems.28.3.251}
+        }
+    @misc{lenia_tutorial_2023,
+        title        = {From Conway to Lenia},
+        author       = {Chan, Bert},
+        year         = 2023,
+        howpublished = {\url{https://colab.research.google.com/github/OpenLenia/Lenia-Tutorial/blob/main/Tutorial_From_Conway_to_Lenia.ipynb}},
+        note         = {Accessed: 2023-04-24}
+        }
+    @misc{particle_lenia_2023,
+        title        = {Particle Lenia and the energy-based formulation},
+        author       = {Mordvintsev, Alexander},  % If individual authors are listed, replace this with their names
+        year         = 2023,
+        howpublished = {\url{https://google-research.github.io/self-organising-systems/particle-lenia/}},
+        note         = {Accessed: 2023-04-24}  % Update the access date as needed
+        }
+    @misc{sensorimotor_agency_2022,
+        TITLE = {{Learning Sensorimotor Agency in Cellular Automata}},
+        AUTHOR = {Hamon, Gautier and Etcheverry, Mayalen and Chan, Bert Wang-Chak and Moulin-Frier, Cl{\'e}ment and Oudeyer, Pierre-Yves},
+        URL = {https://inria.hal.science/hal-03519319},
+        NOTE = {In this blogpost, we explore the concepts of  embodiment, individuality, self-maintenance and sensorimotor agency within a cellular automaton (CA) environment. Whereas those concepts are central in theoretical biology and cognitive science, it remains unclear how such behaviors can emerge in a CA-like environment made only of low-level particles and physical rules. We present a novel set of tools (based on curriculum learning, diversity search and gradient descent over a differentiable CA) to automatically learn the rules leading to the emergence of such behaviors.  Our method is able to discover robust self-organizing agents with strong coherence and generalization to out-of-distribution changes, reminiscent of the robustness of living systems to maintain specific functions despite environmental and body perturbations.},
+        YEAR = {2022},
+        MONTH = Jan,
+        HAL_ID = {hal-03519319},
+        HAL_VERSION = {v1},
+        }
+    @article{salimans2017evolution,
+        title={Evolution strategies as a scalable alternative to reinforcement learning},
+        author={Salimans, Tim and Ho, Jonathan and Chen, Xi and Sidor, Szymon and Sutskever, Ilya},
+        journal={arXiv preprint arXiv:1703.03864},
+        year={2017}
+        }
+    @article{evosax2022github,
+        author = {Robert Tjarko Lange},
+        title = {evosax: JAX-based Evolution Strategies},
+        journal={arXiv preprint arXiv:2212.04180},
+        year = {2022},
+        }
+    @misc{leniatutorial2023,
+        author = {Chan, Bert},
+        title = {Tutorial: From Conway to Lenia},
+        year = {2023},
+        howpublished = {GitHub repository},
+        url = {https://colab.research.google.com/github/OpenLenia/Lenia-Tutorial/blob/main/Tutorial_From_Conway_to_Lenia.ipynb},
+        note = {Accessed: 2024-04-25}
+        }
+    
+    @unknown{flowLenia,
+        author = {Plantec, Erwan and Hamon, Gautier and Etcheverry, Mayalen and Oudeyer, Pierre-Yves and Moulin-Frier, Clément and Chan, Bert},
+        year = {2022},
+        month = {12},
+        pages = {},
+        title = {Flow Lenia: Mass conservation for the study of virtual creatures in continuous cellular automata},
+        doi = {10.48550/arXiv.2212.07906}
+        }
+</script>
